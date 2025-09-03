@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okochulo <okochulo@student.42vienna.c      +#+  +:+       +#+        */
+/*   By: okochulo <okochulo@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/13 12:42:49 by okochulo          #+#    #+#             */
-/*   Updated: 2025/08/13 12:42:54 by okochulo         ###   ########.fr       */
+/*   Updated: 2025/09/03 17:42:14 by okochulo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-char    *ft_strdup(char *s1)
+char	*ft_strdup(char *s1)
 {
 	char			*dest;
 	unsigned int	i;
@@ -43,14 +43,16 @@ size_t	ft_strlen(char *s)
 char	*ft_substr(char *s, unsigned int start, size_t len)
 {
 	size_t	i;
+	size_t	slen;
 	char	*str;
 
 	if (!s)
 		return (NULL);
-	if (start > ft_strlen(s))
+	slen = ft_strlen(s);
+	if (start > slen)
 		return (malloc(1));
-	if (len > ft_strlen(s + start))
-		len = ft_strlen(s + start);
+	if (len > slen - start)
+		len = slen - start;
 	str = malloc((len + 1) * sizeof(char));
 	if (!str)
 		return (NULL);
@@ -60,7 +62,7 @@ char	*ft_substr(char *s, unsigned int start, size_t len)
 		str[i] = s[start + i];
 		i++;
 	}
-	str[i] = 0;
+	str[i] = '\0';
 	return (str);
 }
 
