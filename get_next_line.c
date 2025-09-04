@@ -6,7 +6,7 @@
 /*   By: okochulo <okochulo@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/13 12:41:39 by okochulo          #+#    #+#             */
-/*   Updated: 2025/09/03 16:42:32 by okochulo         ###   ########.fr       */
+/*   Updated: 2025/09/04 21:16:14 by okochulo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 static char	*_fill_line_buff(int fd, char *left_char, char *buff);
 static char	*_set_line(char *line);
 static char	*ft_strchr(char *s, int c);
+static void	*_free_and_null(char **ptr);
 
 char	*get_next_line(int fd)
 {
@@ -22,21 +23,15 @@ char	*get_next_line(int fd)
 	char		*line;
 	char		*buff;
 
+	if (fd < 0 || BUFFER_SIZE <= 0)
+		return (_free_and_null(&left_char), NULL);
 	buff = (char *)malloc((BUFFER_SIZE + 1) * sizeof(char));
-	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
-	{
-		free(left_char);
-		free(buff);
-		left_char = NULL;
-		buff = NULL;
-		return (NULL);
-	}
 	if (!buff)
-		return (NULL);
+		return (_free_and_null(&left_char), NULL);
 	line = _fill_line_buff(fd, left_char, buff);
 	free(buff);
 	if (!line)
-		return (NULL);
+		return (_free_and_null(&left_char), NULL);
 	left_char = _set_line(line);
 	return (line);
 }
@@ -47,15 +42,15 @@ static char	*_set_line(char *line_buff)
 	ssize_t	i;
 
 	i = 0;
-	while (line_buff[i] != '\n' && line_buff[i] != '\0')
+	while (line_buff[i] && line_buff[i] != '\n')
 		i++;
-	if (line_buff[i] == 0 || line_buff[1] == 0)
+	if (line_buff[i] == '\0')
 		return (NULL);
-	left_char = ft_substr(line_buff, i + 1, ft_strlen(line_buff) - i);
-	if (*left_char == 0)
+	left_char = ft_substr(line_buff, i + 1, ft_strlen(line_buff) - i - 1);
+	if (!left_char || left_char[0] == '\0')
 	{
 		free(left_char);
-		left_char = NULL;
+		return (NULL);
 	}
 	line_buff[i + 1] = '\0';
 	return (left_char);
@@ -67,23 +62,19 @@ static char	*_fill_line_buff(int fd, char *left_char, char *buff)
 	char	*tmp;
 
 	buff_reads = 1;
-	while (buff_reads > 0)
+	while (buff_reads > 0 && (!left_char || !ft_strchr(left_char, '\n')))
 	{
 		buff_reads = read(fd, buff, BUFFER_SIZE);
 		if (buff_reads == -1)
-		{
-			free(left_char);
 			return (NULL);
-		}
 		else if (buff_reads == 0)
 			break ;
 		buff[buff_reads] = 0;
-		if (!left_char)
-			left_char = ft_strdup("");
 		tmp = left_char;
 		left_char = ft_strjoin(tmp, buff);
-		free(tmp);
-		tmp = NULL;
+		if (!left_char)
+			return (NULL);
+		//tmp = NULL;
 		if (ft_strchr(buff, '\n'))
 			break ;
 	}
@@ -105,5 +96,15 @@ static char	*ft_strchr(char *s, int c)
 	}
 	if (s[i] == chr)
 		return ((char *) &s[i]);
+	return (NULL);
+}
+
+static void	*_free_and_null(char **ptr)
+{
+	if (ptr && *ptr)
+	{
+		free(*ptr);
+		*ptr = NULL;
+	}
 	return (NULL);
 }

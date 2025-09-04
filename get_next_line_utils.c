@@ -6,7 +6,7 @@
 /*   By: okochulo <okochulo@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/13 12:42:49 by okochulo          #+#    #+#             */
-/*   Updated: 2025/09/03 17:42:14 by okochulo         ###   ########.fr       */
+/*   Updated: 2025/09/04 21:12:24 by okochulo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ char	*ft_substr(char *s, unsigned int start, size_t len)
 		return (NULL);
 	slen = ft_strlen(s);
 	if (start > slen)
-		return (malloc(1));
+		return (NULL);
 	if (len > slen - start)
 		len = slen - start;
 	str = malloc((len + 1) * sizeof(char));
@@ -70,10 +70,20 @@ char	*ft_strjoin(char *s1, char *s2)
 {
 	char			*res;
 
+	if (!s1 && !s2)
+		return (NULL);
+	if (!s1)
+		s1 = ft_strdup("");
+	if (!s1 || !s2)
+		return (NULL);
 	res = (char *) malloc((ft_strlen(s1) + ft_strlen(s2) + 1) * sizeof(char));
 	if (!res)
+	{
+		free(s1);
 		return (NULL);
+	}
 	fill_str(res, s1, s2);
+	free(s1);
 	return (res);
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okochulo <okochulo@student.42vienna.c      +#+  +:+       +#+        */
+/*   By: okochulo <okochulo@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/13 12:42:19 by okochulo          #+#    #+#             */
-/*   Updated: 2025/09/03 16:31:43 by okochulo         ###   ########.fr       */
+/*   Updated: 2025/09/04 16:14:18 by okochulo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
