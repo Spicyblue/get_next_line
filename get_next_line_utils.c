@@ -6,7 +6,7 @@
 /*   By: okochulo <okochulo@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/13 12:42:49 by okochulo          #+#    #+#             */
-/*   Updated: 2025/09/04 21:12:24 by okochulo         ###   ########.fr       */
+/*   Updated: 2025/09/04 22:50:35 by okochulo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ char	*ft_strjoin(char *s1, char *s2)
 		return (NULL);
 	if (!s1)
 		s1 = ft_strdup("");
-	if (!s1 || !s2)
+	if (!s1)
 		return (NULL);
 	res = (char *) malloc((ft_strlen(s1) + ft_strlen(s2) + 1) * sizeof(char));
 	if (!res)
@@ -82,22 +82,22 @@ char	*ft_strjoin(char *s1, char *s2)
 		free(s1);
 		return (NULL);
 	}
-	fill_str(res, s1, s2);
+	fill_str(res, s1, s2, ft_strlen(s1) + ft_strlen(s2));
 	free(s1);
 	return (res);
 }
 
-void	fill_str(char *res, char *s1, char *s2)
+void	fill_str(char *res, char *s1, char *s2, unsigned int max)
 {
 	unsigned int	i;
 	unsigned int	j;
 
 	i = 0;
 	j = 0;
-	while (s1[j])
+	while (s1[j] && i < max)
 		res[i++] = s1[j++];
 	j = 0;
-	while (s2[j])
+	while (s2[j] && i < max)
 		res[i++] = s2[j++];
 	res[i] = '\0';
 }

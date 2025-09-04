@@ -6,7 +6,7 @@
 /*   By: okochulo <okochulo@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/13 12:41:39 by okochulo          #+#    #+#             */
-/*   Updated: 2025/09/04 21:16:14 by okochulo         ###   ########.fr       */
+/*   Updated: 2025/09/04 22:52:35 by okochulo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 static char	*_fill_line_buff(int fd, char *left_char, char *buff);
 static char	*_set_line(char *line);
 static char	*ft_strchr(char *s, int c);
-static void	*_free_and_null(char **ptr);
+static void	*_free_and_null(char *ptr);
 
 char	*get_next_line(int fd)
 {
@@ -24,14 +24,14 @@ char	*get_next_line(int fd)
 	char		*buff;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
-		return (_free_and_null(&left_char), NULL);
+		return (_free_and_null(left_char));
 	buff = (char *)malloc((BUFFER_SIZE + 1) * sizeof(char));
 	if (!buff)
-		return (_free_and_null(&left_char), NULL);
+		return (_free_and_null(left_char));
 	line = _fill_line_buff(fd, left_char, buff);
 	free(buff);
 	if (!line)
-		return (_free_and_null(&left_char), NULL);
+		return (_free_and_null(left_char));
 	left_char = _set_line(line);
 	return (line);
 }
@@ -47,7 +47,9 @@ static char	*_set_line(char *line_buff)
 	if (line_buff[i] == '\0')
 		return (NULL);
 	left_char = ft_substr(line_buff, i + 1, ft_strlen(line_buff) - i - 1);
-	if (!left_char || left_char[0] == '\0')
+	if (!left_char)
+		return (NULL);
+	if (left_char[0] == '\0')
 	{
 		free(left_char);
 		return (NULL);
@@ -74,7 +76,6 @@ static char	*_fill_line_buff(int fd, char *left_char, char *buff)
 		left_char = ft_strjoin(tmp, buff);
 		if (!left_char)
 			return (NULL);
-		//tmp = NULL;
 		if (ft_strchr(buff, '\n'))
 			break ;
 	}
@@ -99,12 +100,12 @@ static char	*ft_strchr(char *s, int c)
 	return (NULL);
 }
 
-static void	*_free_and_null(char **ptr)
+static void	*_free_and_null(char *ptr)
 {
-	if (ptr && *ptr)
+	if (ptr)
 	{
-		free(*ptr);
-		*ptr = NULL;
+		free(ptr);
+		ptr = NULL;
 	}
 	return (NULL);
 }
