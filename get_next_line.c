@@ -6,7 +6,7 @@
 /*   By: okochulo <okochulo@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/13 12:41:39 by okochulo          #+#    #+#             */
-/*   Updated: 2025/09/04 22:52:35 by okochulo         ###   ########.fr       */
+/*   Updated: 2025/09/05 11:36:23 by okochulo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,14 +68,17 @@ static char	*_fill_line_buff(int fd, char *left_char, char *buff)
 	{
 		buff_reads = read(fd, buff, BUFFER_SIZE);
 		if (buff_reads == -1)
-			return (NULL);
+			return (free(left_char), NULL);
 		else if (buff_reads == 0)
 			break ;
 		buff[buff_reads] = 0;
 		tmp = left_char;
 		left_char = ft_strjoin(tmp, buff);
 		if (!left_char)
+		{
+			free(tmp);
 			return (NULL);
+		}
 		if (ft_strchr(buff, '\n'))
 			break ;
 	}
